@@ -4,7 +4,7 @@
 
 #include "erl_nif.h"
 
-#define VAL(data, index)    (data->data + sizeof(PRIVDATA) * index)->val
+#define VAL(data, index)    (data->data + sizeof(PRIVVAL) * index)->val
 #define NELEM(data)         data->nelem
 
 typedef struct {
