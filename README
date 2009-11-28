@@ -7,3 +7,26 @@ not push the boundaries a bit further and create a mutable data
 store?
 
 
+USAGE
+
+Erlang R13B03 (erts-5.7.4) [source] [smp:2:2] [rq:2] [async-threads:0] [kernel-poll:false]
+
+Eshell V5.7.4  (abort with ^G)
+1> wat:init(1024).
+ok
+2> wat:get(20).
+0
+3> wat:set(20,5).
+5
+4> wat:get(20).  
+5
+5> wat:add(20,10).
+15
+6> wat:get(20).   
+15
+7> wat:init(10).
+ok
+8> wat:get(20). 
+{error,out_of_bounds}
+9> 
+
