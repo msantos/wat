@@ -1,0 +1,9 @@
+
+wat is an example of how to use the Erlang native implemented
+functions.
+
+Since nif's already decrease the reliability of the erlang VM, why
+not push the boundaries a bit further and create a mutable data
+store?
+
+
