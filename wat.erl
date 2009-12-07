@@ -13,7 +13,7 @@ on_load() ->
     on_load(32),
     true.
 on_load(N) ->
-    erlang:load_nif("./wat", N),
+    ok = erlang:load_nif("./wat", N),
     true.
 
 get(_) ->
