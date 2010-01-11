@@ -35,8 +35,10 @@ load(ErlNifEnv *env, void **priv, ERL_NIF_TERM load_info)
         return (-1);
 
     data->data = (PRIVVAL *)enif_alloc(env, sizeof(PRIVVAL) * nelem);
-    if (data->data == NULL)
+    if (data->data == NULL) {
+        enif_free(env, data);
         return (-1);
+    }
 
     (void)memset(data->data, 0, sizeof(PRIVVAL) * nelem);
 
