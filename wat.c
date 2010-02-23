@@ -46,7 +46,7 @@ load(ErlNifEnv *env, void **priv, ERL_NIF_TERM load_info)
     *priv = data;
 
     return (0);
-}   
+}
 
 
     static int
