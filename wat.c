@@ -60,7 +60,7 @@ reload(ErlNifEnv *env, void **priv, ERL_NIF_TERM load_info)
 
 
     static ERL_NIF_TERM
-get(ErlNifEnv *env, ERL_NIF_TERM key)
+get(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
 {
     PRIVDATA *data = NULL;
     int k = 0;
@@ -69,7 +69,7 @@ get(ErlNifEnv *env, ERL_NIF_TERM key)
     data = (PRIVDATA *)enif_get_data(env);
     nelem = NELEM(data);
 
-    if (!enif_get_int(env, key, &k))
+    if (!enif_get_int(env, argv[0], &k))
         return enif_make_badarg(env);
 
     if ( (k < 0) || (k >= nelem))
@@ -79,8 +79,9 @@ get(ErlNifEnv *env, ERL_NIF_TERM key)
 }
 
 
+/* args: 0:key, 1:value */
     static ERL_NIF_TERM
-set(ErlNifEnv *env, ERL_NIF_TERM key, ERL_NIF_TERM val)
+set(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
 {
     PRIVDATA *data = NULL;
     int k = 0;
@@ -90,8 +91,8 @@ set(ErlNifEnv *env, ERL_NIF_TERM key, ERL_NIF_TERM val)
     data = (PRIVDATA *)enif_get_data(env);
     nelem = NELEM(data);
 
-    if ( !enif_get_int(env, key, &k) ||
-        !enif_get_int(env, val, &v))
+    if ( !enif_get_int(env, argv[0], &k) ||
+        !enif_get_int(env, argv[1], &v))
         return enif_make_badarg(env);
 
     if ( (k < 0) || (k >= nelem))
@@ -104,7 +105,7 @@ set(ErlNifEnv *env, ERL_NIF_TERM key, ERL_NIF_TERM val)
 
 
     static ERL_NIF_TERM
-add(ErlNifEnv *env, ERL_NIF_TERM key, ERL_NIF_TERM val)
+add(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
 {
     PRIVDATA *data = NULL;
     int k = 0;
@@ -114,8 +115,8 @@ add(ErlNifEnv *env, ERL_NIF_TERM key, ERL_NIF_TERM val)
     data = (PRIVDATA *)enif_get_data(env);
     nelem = NELEM(data);
 
-    if ( !enif_get_int(env, key, &k) ||
-        !enif_get_int(env, val, &v))
+    if ( !enif_get_int(env, argv[0], &k) ||
+        !enif_get_int(env, argv[1], &v))
         return enif_make_badarg(env);
 
     if ( (k < 0) || (k >= nelem))

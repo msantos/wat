@@ -10,11 +10,9 @@ init(N) ->
     on_load(N).
 
 on_load() ->
-    on_load(32),
-    true.
+    on_load(32).
 on_load(N) ->
-    ok = erlang:load_nif("./wat", N),
-    true.
+    erlang:load_nif("./wat", N).
 
 get(_) ->
     erlang:error(not_implemented).
