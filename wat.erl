@@ -12,7 +12,11 @@ init(N) ->
 on_load() ->
     on_load(32).
 on_load(N) ->
-    erlang:load_nif("./wat", N).
+    Lib = filename:join([
+            filename:dirname(code:which(?MODULE)),
+            ?MODULE
+        ]),
+    erlang:load_nif(Lib, N).
 
 get(_) ->
     erlang:error(not_implemented).
