@@ -29,14 +29,14 @@ load(ErlNifEnv *env, void **priv, ERL_NIF_TERM load_info)
     if (!enif_get_int(env, load_info, &nelem) || (nelem < 1))
         return (-1);
 
-    data = (PRIVDATA *)enif_alloc(env, sizeof(PRIVDATA));
+    data = (PRIVDATA *)enif_alloc(sizeof(PRIVDATA));
 
     if (data == NULL)
         return (-1);
 
-    data->data = (PRIVVAL *)enif_alloc(env, sizeof(PRIVVAL) * nelem);
+    data->data = (PRIVVAL *)enif_alloc(sizeof(PRIVVAL) * nelem);
     if (data->data == NULL) {
-        enif_free(env, data);
+        enif_free(data);
         return (-1);
     }
 
@@ -52,8 +52,8 @@ load(ErlNifEnv *env, void **priv, ERL_NIF_TERM load_info)
     static int
 reload(ErlNifEnv *env, void **priv, ERL_NIF_TERM load_info)
 {
-    enif_free(env, ((PRIVDATA *)*priv)->data);
-    enif_free(env, *priv);
+    enif_free(((PRIVDATA *)*priv)->data);
+    enif_free(*priv);
 
     return load(env, priv, load_info);
 }
@@ -66,7 +66,7 @@ get(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
     int k = 0;
     int nelem = 0;
 
-    data = (PRIVDATA *)enif_get_data(env);
+    data = (PRIVDATA *)enif_priv_data(env);
     nelem = NELEM(data);
 
     if (!enif_get_int(env, argv[0], &k))
@@ -88,7 +88,7 @@ set(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
     int v = 0;
     int nelem = 0;
 
-    data = (PRIVDATA *)enif_get_data(env);
+    data = (PRIVDATA *)enif_priv_data(env);
     nelem = NELEM(data);
 
     if ( !enif_get_int(env, argv[0], &k) ||
@@ -112,7 +112,7 @@ add(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
     int v = 0;
     int nelem = 0;
 
-    data = (PRIVDATA *)enif_get_data(env);
+    data = (PRIVDATA *)enif_priv_data(env);
     nelem = NELEM(data);
 
     if ( !enif_get_int(env, argv[0], &k) ||
