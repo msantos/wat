@@ -12,6 +12,7 @@ typedef struct {
 } PRIVVAL;
 
 typedef struct {
+    ErlNifMutex *lock;
     int nelem;
     PRIVVAL *data;
 } PRIVDATA;
@@ -42,6 +43,10 @@ load(ErlNifEnv *env, void **priv, ERL_NIF_TERM load_info)
 
     (void)memset(data->data, 0, sizeof(PRIVVAL) * nelem);
 
+    data->lock = enif_mutex_create("wat_lock");
+    if (data->lock == NULL)
+        return (-1);
+
     NELEM(data) = nelem;
     *priv = data;
 
@@ -52,6 +57,7 @@ load(ErlNifEnv *env, void **priv, ERL_NIF_TERM load_info)
     static int
 reload(ErlNifEnv *env, void **priv, ERL_NIF_TERM load_info)
 {
+    enif_mutex_destroy(((PRIVDATA *)*priv)->lock);
     enif_free(((PRIVDATA *)*priv)->data);
     enif_free(*priv);
 
@@ -98,7 +104,9 @@ set(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
     if ( (k < 0) || (k >= nelem))
         return error_tuple(env, "out_of_bounds");
 
+    enif_mutex_lock(data->lock);
     VAL(data, k) = v;
+    enif_mutex_unlock(data->lock);
 
     return enif_make_int(env, v);
 }
@@ -122,9 +130,12 @@ add(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
     if ( (k < 0) || (k >= nelem))
         return error_tuple(env, "out_of_bounds");
 
+    enif_mutex_lock(data->lock);
     VAL(data, k) += v;
+    v = VAL(data, k);
+    enif_mutex_unlock(data->lock);
 
-    return enif_make_int(env, VAL(data, k));
+    return enif_make_int(env, v);
 }
 
 
